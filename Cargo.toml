@@ -1,0 +1,13 @@
+[package]
+name = "surveillance-rs"
+version = "0.1.0"
+edition = "2024"
+description = "A program that runs object detection on your RTSP streams"
+
+[dependencies]
+clap = { version = "4.5.37", features = ["derive"] }
+config = "0.15.11"
+gstreamer = "0.23.5"
+gstreamer-app = "0.23.5"
+serde = { version = "1.0.219", features = ["derive"] }
+strum = { version = "0.27.1", features = ["derive"] }
