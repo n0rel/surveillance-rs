@@ -1,11 +1,10 @@
 use gstreamer::{MessageView, Pipeline, glib, prelude::*};
-use log::{debug, info, error};
+use log::{debug, error, info};
 use tokio::sync::mpsc::Sender;
-
 
 /// A structure defining a frame from a stream.
 /// This should be the same thing returned from all
-/// streams, in order to create an interface to 
+/// streams, in order to create an interface to
 /// stream products
 pub struct StreamFrame {
     pub source: String,
@@ -14,7 +13,6 @@ pub struct StreamFrame {
 
 /// Interface for any stream.
 pub trait Stream {
-
     /// The main function for running a stream.
     /// Each frame from the stream is to be sent through a
     /// sender in order to be able to process the frames from
@@ -30,22 +28,25 @@ pub struct RTSPStream {
 
 impl Stream for RTSPStream {
     fn stream(&self, tx: &Sender<StreamFrame>) {
-        info!("[{}] Beginning stream from {}", &self.stream_name, &self.rtsp_uri);
+        info!(
+            "[{}] Beginning stream from {}",
+            &self.stream_name, &self.rtsp_uri
+        );
 
-        let pipeline = match self
-            ._setup_gstreamer_pipeline(&self.stream_name, &self.rtsp_uri, &tx) {
-                Ok(pipeline) => pipeline,
-                Err(bool_error) => {
-                    error!("[{}], {}", &self.stream_name, bool_error.message);
-                    return
-                }
-            };
+        let pipeline = match self._setup_gstreamer_pipeline(&self.stream_name, &self.rtsp_uri, &tx)
+        {
+            Ok(pipeline) => pipeline,
+            Err(bool_error) => {
+                error!("[{}], {}", &self.stream_name, bool_error.message);
+                return;
+            }
+        };
 
         match self._iter_on_bus(&pipeline) {
             Ok(()) => info!("[{}] Stream finished playing", &self.stream_name),
             Err(error_message) => {
                 error!("[{}] {}", &self.stream_name, error_message);
-                return
+                return;
             }
         }
 
@@ -114,7 +115,7 @@ impl RTSPStream {
 
                     let frame = StreamFrame {
                         source: location_name_clone.clone(),
-                        data: data
+                        data: data,
                     };
 
                     tx_clone.blocking_send(frame).unwrap();

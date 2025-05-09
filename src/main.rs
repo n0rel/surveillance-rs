@@ -2,13 +2,13 @@ mod cli;
 mod config;
 mod streams;
 
-use std::thread;
 use log::debug;
+use std::thread;
 use tokio::sync::mpsc::{self, Sender};
 
 use cli::Cli;
 use config::parse_configuration;
-use streams::{RTSPStream, StreamFrame, Stream};
+use streams::{RTSPStream, Stream, StreamFrame};
 
 /// Synchronous thread for spawning streams.
 /// Each stream is spawned in a new thread and
@@ -24,7 +24,6 @@ fn streams_thread(tx: &Sender<StreamFrame>, streams: Vec<impl Stream + Send>) {
         }
     });
 }
-
 
 /// Notes:
 /// 1. Important things to monitor:
@@ -43,13 +42,11 @@ async fn main() {
 
     let mut streams = Vec::new();
     for source_configuration in configuration.sources {
-        streams.push(
-            RTSPStream {
-                stream_name: source_configuration.name,
-                rtsp_uri: source_configuration.source_uri
-            }
-        );
-    };
+        streams.push(RTSPStream {
+            stream_name: source_configuration.name,
+            rtsp_uri: source_configuration.source_uri,
+        });
+    }
 
     tokio::task::spawn_blocking(move || {
         streams_thread(&tx, streams);
