@@ -4,14 +4,14 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SourceConfiguration {
-    name: String,
-    source_uri: String
+    pub name: String,
+    pub source_uri: String
 }
 
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Configuration {
-    sources: Vec<SourceConfiguration>
+    pub sources: Vec<SourceConfiguration>
 }
 
 

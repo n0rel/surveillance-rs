@@ -6,8 +6,14 @@ description = "A program that runs object detection on your RTSP streams"
 
 [dependencies]
 clap = { version = "4.5.37", features = ["derive"] }
+clearscreen = "4.0.1"
 config = "0.15.11"
+crossbeam = "0.8.4"
+env_logger = "0.11.8"
 gstreamer = "0.23.5"
 gstreamer-app = "0.23.5"
+image = "0.25.6"
+log = "0.4.27"
 serde = { version = "1.0.219", features = ["derive"] }
 strum = { version = "0.27.1", features = ["derive"] }
+tokio = { version = "1.45.0", features = ["full"] }
